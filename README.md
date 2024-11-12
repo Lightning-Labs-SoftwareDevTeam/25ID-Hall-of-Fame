@@ -1,3 +1,13 @@
+## First Build
+
+If this is your first build, start with the following command from the project directory:
+
+### `npm install`
+
+## Database URL
+
+The database URL is currently stored in the src/components/constants/appConstants.js file. Modify the URL as needed.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
