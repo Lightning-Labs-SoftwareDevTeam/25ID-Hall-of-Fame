@@ -50,5 +50,5 @@ class Inductee(db.Model):
     place = db.Column(db.String(100), nullable=True)
     date = db.Column(db.String(100), nullable=True)
     image = db.Column(db.LargeBinary, nullable=True)
-    citation = db.Column(db.String(2000), nullable=False)
+    citation = db.Column(db.String(5000), nullable=False)
     category = db.Column(db.String(100), nullable=True)
