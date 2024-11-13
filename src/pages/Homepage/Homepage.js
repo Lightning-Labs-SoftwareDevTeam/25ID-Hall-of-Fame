@@ -27,7 +27,7 @@ function Homepage () {
             <li key={inductee.id}>
               <button onClick={() => handleClick(inductee)}>
                 <h3>
-                  {inductee.rank} {inductee.name} ({inductee.unit})
+                  {inductee.date} {inductee.name} ({inductee.unit})
                 </h3>
               </button>
             </li>
