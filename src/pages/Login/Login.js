@@ -20,7 +20,7 @@ function Login() {
 
     const success = await login(loginData);
     if (success) {
-      //TODO: Navigate Admin Page using navigate
+      navigate("/admin/home/")
     }
     setProcessing(false);
   };

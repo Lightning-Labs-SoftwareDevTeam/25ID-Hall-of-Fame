@@ -4,8 +4,6 @@ const acceptableResponseCodes = [200, 201]
 
 async function NetworkRequest({ urlExtension, method, headers = {}, body = null }) {
     try {
-        console.log(DB_URL)
-        console.log(urlExtension)
         const response = await fetch(`${DB_URL}${urlExtension}`, {
             method: method,
             headers: headers,

@@ -1,8 +1,10 @@
 import flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 
 def connect_db(app: flask.Flask) -> flask.Flask:
@@ -11,6 +13,7 @@ def connect_db(app: flask.Flask) -> flask.Flask:
     """
     db.app = app
     db.init_app(app)
+    migrate.init_app(app, db)
     return app
 
 
@@ -33,3 +36,19 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User {self.username}>"
+    
+class Inductee(db.Model):
+    """
+    Database model for users
+    """
+    __tablename__ = "inductees"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    rank = db.Column(db.String(100), nullable=False)
+    unit = db.Column(db.String(100), nullable=False)
+    place = db.Column(db.String(100), nullable=True)
+    date = db.Column(db.String(100), nullable=True)
+    image = db.Column(db.LargeBinary, nullable=True)
+    citation = db.Column(db.String(2000), nullable=False)
+    category = db.Column(db.String(100), nullable=True)
