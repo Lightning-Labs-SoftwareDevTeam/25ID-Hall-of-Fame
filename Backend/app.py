@@ -57,9 +57,12 @@ def login():
 @app.route('/inductees', methods=['GET'])
 def get_inductees():
     all_inductees = Inductee.query.all()    
-    inductees_list = []
+    inductees = []
     for inductee in all_inductees:
-        inductees_list.append({
+        image_base64 = None
+        if inductee.image:
+            image_base64 = base64.b64encode(inductee.image).decode('utf-8')
+        inductees.append({
             "id": inductee.id,
             "name": inductee.name,
             "rank": inductee.rank,
@@ -67,25 +70,23 @@ def get_inductees():
             "place": inductee.place,
             "date": inductee.date,
             "citation": inductee.citation,
-            "category": inductee.category
+            "category": inductee.category,
+            "image": image_base64
         })
     
-    return jsonify(inductees_list), 200
+    return jsonify(inductees), 200
 
 
 @app.route('/inductees', methods=['POST'])
 def add_inductee():
-    data = request.get_json()
-
-    name = data.get("name")
-    rank = data.get("rank")
-    unit = data.get("unit")
-    place = data.get("place")
-    date = data.get("date")
-    citation = data.get("citation")
-    image_data = data.get("image")
-    category = data.get("category")
-
+    name = request.form.get("name")
+    rank = request.form.get("rank")
+    unit = request.form.get("unit")
+    place = request.form.get("place")
+    date = request.form.get("date")
+    citation = request.form.get("citation")
+    category = request.form.get("category")
+    image_file = request.files.get("image")
 
     if not name:
         return jsonify({"message": "Name is required"}), 400
@@ -99,7 +100,7 @@ def add_inductee():
     if not citation:
         return jsonify({"message": "Citation is required"}), 400
     
-    image_binary = base64.b64decode(image_data) if image_data else None
+    image_binary = image_file.read() if image_file else None
 
     new_inductee = Inductee(
         name=name, 
@@ -107,7 +108,7 @@ def add_inductee():
         unit=unit,
         place=place,
         date=date,
-        citation=citation, 
+        citation=citation,
         image=image_binary,
         category=category
     )
@@ -119,16 +120,14 @@ def add_inductee():
 
 @app.route('/inductees/<int:id>', methods=['PUT'])
 def update_inductee(id):
-    data = request.get_json()
-
-    name = data.get("name")
-    rank = data.get("rank")
-    unit = data.get("unit")
-    place = data.get("place")
-    date = data.get("date")
-    citation = data.get("citation")
-    image_data = data.get("image")
-    category = data.get("category")
+    name = request.form.get("name")
+    rank = request.form.get("rank")
+    unit = request.form.get("unit")
+    place = request.form.get("place")
+    date = request.form.get("date")
+    citation = request.form.get("citation")
+    category = request.form.get("category")
+    image_file = request.files.get("image")
 
     inductee = Inductee.query.get(id)
     if not inductee:
@@ -146,8 +145,8 @@ def update_inductee(id):
         inductee.date = date
     if citation:
         inductee.citation = citation
-    if image_data:
-        inductee.image = base64.b64decode(image_data)
+    if image_file:
+        inductee.image = image_file.read()
     if category:
         inductee.category = category
 
@@ -170,6 +169,6 @@ def delete_inductee(id):
 
 if __name__ == '__main__':
     create_seed_users()
-    create_seed_inductees()
+    #create_seed_inductees()
     if env.DEBUG: print("Running on localhost: http://127.0.0.1:5000")
     serve(app, host="0.0.0.0", port=5000)

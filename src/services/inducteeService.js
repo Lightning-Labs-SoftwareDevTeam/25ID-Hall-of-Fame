@@ -1,7 +1,8 @@
-import { GET, POST, PUT, DELETE, AUTHORIZATION_HEADER } from '../lib/networkRequestConstants';
+import { GET, POST, PUT, DELETE, AUTHORIZATION_HEADER, FORM_DATA_HEADER } from '../lib/networkRequestConstants';
 import NetworkRequest from '../lib/networkClient';
+import InducteeDTO from '../dtos/inducteeDTO/inducteeDTO';
 
-const urlExtension = '/inductees'
+const urlExtension = 'inductees'
 
 const inducteeService = {
     async getInductees() {
@@ -11,7 +12,14 @@ const inducteeService = {
                 method: GET
             })
 
-            return data;
+            const inducteeDTOs = []
+            for (const inductee of data) {
+                const inducteeDTO = InducteeDTO.fromData(inductee);
+                inducteeDTOs.push(inducteeDTO);
+            }
+            console.log(inducteeDTOs);
+
+            return inducteeDTOs;
         } catch (error) {
             throw(error);
         }
@@ -28,7 +36,7 @@ const inducteeService = {
                 headers: headers
             })
 
-            return true
+            return true;
         } catch (error) {
             throw(error)
         }
@@ -41,12 +49,12 @@ const inducteeService = {
         try {
             const data = await NetworkRequest({
                 urlExtension: `${urlExtension}`,
-                method: PUT,
+                method: POST,
                 headers: headers,
-                body: inductee.jsonify() //TODO: This needs to be defined
+                body: inductee.createBody()
             })
 
-            return data
+            return data;
         } catch (error) {
             throw(error);
         }
@@ -56,15 +64,16 @@ const inducteeService = {
         const headers = {
             ...AUTHORIZATION_HEADER(token)
         }
+
         try {
             const data = await NetworkRequest({
                 urlExtension: `${urlExtension}/${id}`,
-                method: POST,
+                method: PUT,
                 headers: headers,
-                body: inductee.jsonify()
+                body: await inductee.createBody()
             })
 
-            return data
+            return data;
         } catch (error) {
             throw(error);
         }

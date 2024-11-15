@@ -22,7 +22,7 @@ const FormField = ({ required, id, text, type, checked, checkboxSize, value, onC
                         checkboxSize={checkboxSize}
                     />
                 </div>
-            ) : type === "multilineTextInput" ? (
+            ) : type === "multiline" ? (
                 <MultilineTextInput
                     maxWidth={maxWidth}
                     id={id}

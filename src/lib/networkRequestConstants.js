@@ -5,5 +5,5 @@ export const PATCH = "PATCH"
 export const DELETE = "DELETE"
 export const APPLICATION_JSON_HEADER = { 'Content-Type': 'application/json' }
 export const AUTHORIZATION_HEADER = (token) => ({
-    'Authorization': `Token ${token}`
+    'Authorization': `Bearer ${token}`
 });

@@ -1,0 +1,22 @@
+.adminList {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+
+.div1 {
+    flex: 1;
+}
+
+.div2 {
+    display: flex;
+    gap: 5px;
+}
+
+.adminList h3 {
+    flex: 1.5;
+    text-align: right;
+    justify-self: flex-end;
+    margin-right: 20px;
+}
