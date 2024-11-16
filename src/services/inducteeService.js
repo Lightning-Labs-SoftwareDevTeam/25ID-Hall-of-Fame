@@ -51,7 +51,7 @@ const inducteeService = {
                 urlExtension: `${urlExtension}`,
                 method: POST,
                 headers: headers,
-                body: inductee.createBody()
+                body: await inductee.createBody()
             })
 
             return data;
