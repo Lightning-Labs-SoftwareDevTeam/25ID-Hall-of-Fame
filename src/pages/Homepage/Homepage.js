@@ -28,7 +28,7 @@ function Homepage () {
 
   const clickedTitle = () => {
     setClicked((prev) => (prev + 1));
-    if (clicked == 5) {
+    if (clicked === 5) {
       navigate('/login')
     }
   }
