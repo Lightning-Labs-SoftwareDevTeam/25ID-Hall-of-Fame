@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import inducteeService from '../../services/inducteeService'
+import { useNavigate } from 'react-router-dom';
+import styles from './Homepage.module.css';
+import Header from '../../components/Header/Header';
 
 function Homepage () {
-  const [inductees, setInductees] = useState(null)
+  const [inductees, setInductees] = useState(null);
+  const [clicked, setClicked] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getInductees = async () => {
@@ -17,22 +22,35 @@ function Homepage () {
     getInductees()
   }, [])
 
+  const handleClick = (inductee) => {
+    navigate('/inductee', { state: { inductee: inductee }})
+  }
+
+  const clickedTitle = () => {
+    setClicked((prev) => (prev + 1));
+    if (clicked == 5) {
+      navigate('/login')
+    }
+  }
+
   return (
-    <div>
-      <header>Welcome to 25ID Hall of Fame!</header>
+    <div className='App'>
+      <div className={styles.headerDiv}>
+        <button onClick={clickedTitle} className={styles.titleButton}>
+          <Header text="Welcome to 25ID Hall of Fame!" />
+        </button>
+
+        <img src={require("../../assets/medal-of-honor2.png")} alt="Medal of Honor" className={styles.logo} />
+      </div>
 
       {inductees && inductees.length > 0 ? (
-        <ul>
+        <div className={styles.inducteeList}>
           {inductees.map(inductee => (
-            <li key={inductee.id}>
-              <button onClick={() => handleClick(inductee)}>
-                <h3>
-                  {inductee.place} {inductee.name} ({inductee.unit})
-                </h3>
-              </button>
-            </li>
+            <button onClick={() => handleClick(inductee)}>
+              {inductee.rank} {inductee.name} ({inductee.unit})
+            </button>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>No inductees available.</p>
       )}

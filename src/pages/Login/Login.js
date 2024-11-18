@@ -5,6 +5,8 @@ import GeneralButton from '../../components/GeneralButton/GeneralButton';
 import Form from '../../components/Form/Form';
 import FormField from '../../components/Form/FormField';
 import LoginDTO from '../../dtos/loginDTO/loginDTO';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import Header from '../../components/Header/Header';
 
 //FUTURE: Only allow certain number of attemps for login
 function Login() {
@@ -20,7 +22,7 @@ function Login() {
 
     const success = await login(loginData);
     if (success) {
-      navigate("/admin/home/")
+      navigate("/admin/home/");
     }
     setProcessing(false);
   };
@@ -41,9 +43,11 @@ function Login() {
 
   return (
     <div>
-        <header>
-            Admin Login
-        </header>
+      {processing ?
+      <LoadingScreen />
+      :
+      <div className='App'>
+        <Header text="Admin Login" />
 
         <Form onSubmit={handleSubmit}>
           {fields.map(field => (
@@ -66,6 +70,8 @@ function Login() {
           />
         </Form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      </div>
+      }
     </div>
   );
 }

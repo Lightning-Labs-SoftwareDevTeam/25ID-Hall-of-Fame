@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import Header from '../../components/Header/Header';
+import styles from './Inductee.module.css';
 
 function Inductee() {
     const location = useLocation();
@@ -8,41 +10,45 @@ function Inductee() {
 
     useEffect(() => {
         try {
-            updatedInductee = location.state.inductee;
-            setInductee(inductee);
+            const updatedInductee = location.state.inductee;
+            setInductee(updatedInductee);
         } catch (error) {
             console.error(error);
         }
     }, [])
 
     return (
-        <div>
+        <>
             { !inductee ?
             <LoadingScreen />
             :
-            <div>
-                <h1>{inductee.rank} {inductee.name}</h1>
+            <div className='App'>
+                <Header text={`${inductee.rank} ${inductee.name}`} />
 
                 { inductee.image &&
-                <img 
+                <img
                     src={`data:image/jpeg;base64,${inductee.image}`} 
                     alt={`${inductee.name}'s image`} 
-                    style={{ width: '100px', height: '100px' }}
+                    style={{ width: 'auto', height: 'auto', maxWidth: '1000px', maxHeight: '600px' }}
                 />
                 }
                 
                 { inductee.place &&
-                <h2>{inductee.place}</h2>
+                <h2 className={styles.placeDateText}>
+                    {inductee.place}
+                </h2>
                 }
 
                 { inductee.date &&
-                <h2>{inductee.date}</h2>
+                <h2 className={styles.placeDateText}>
+                    {inductee.date}
+                </h2>
                 }
 
-                <p>{inductee.citation}</p>
+                <p className={styles.citationText}>{inductee.citation}</p>
             </div>
             }
-        </div>
+        </>
     )
 }
 

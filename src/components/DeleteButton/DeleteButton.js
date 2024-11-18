@@ -1,10 +1,10 @@
 import React from "react";
-import styles from './GeneralButton.module.css';
+import styles from './DeleteButton.module.css';
 
-function GeneralButton({ onClick, text, disabled=false, type='button', fullWidth=false }) {
+function DeleteButton({ onClick, text, disabled=false, type='button', fullWidth=false }) {
     const buttonElement = (
         <button
-            className={styles.generalButton}
+            className={styles.deleteButton}
             onClick={onClick}
             disabled={disabled}
             type={type}
@@ -16,4 +16,4 @@ function GeneralButton({ onClick, text, disabled=false, type='button', fullWidth
     return fullWidth ? buttonElement : <div>{buttonElement}</div>;
 }
 
-export default GeneralButton;
+export default DeleteButton;

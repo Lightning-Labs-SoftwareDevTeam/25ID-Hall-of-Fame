@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toastRef } from '../../context/toastContext/toastContext';
 import GeneralButton from '../../components/GeneralButton/GeneralButton';
+import DeleteButton from '../../components/DeleteButton/DeleteButton';
 import inducteeService from '../../services/inducteeService';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import { useAuth } from '../../context/authContext';
+import InducteeDTO from '../../dtos/inducteeDTO/inducteeDTO';
+import Header from '../../components/Header/Header';
+import styles from './AdminHomepage.module.css';
 
 
 function AdminHomepage() {
@@ -14,6 +18,10 @@ function AdminHomepage() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!userToken) {
+            navigate('/login');
+            return;
+        }
         getInductees()
     }, [])
 
@@ -34,7 +42,6 @@ function AdminHomepage() {
     }
 
     const confirmDeleteInductee = (inductee) => {
-        console.log(inductee)
         toastRef.current('Are you sure you want to delete this inductee?',
             'info',
             async () => {
@@ -56,10 +63,7 @@ function AdminHomepage() {
     }
 
     const navigateAddInductee = () => {
-        let newInductee = {
-            "name": ''
-        }
-        navigate('/admin/inductee', {state: {inductee: newInductee}})
+        navigate('/admin/inductee', {state: {inductee: new InducteeDTO(), addition: true}})
     }
 
     return (
@@ -67,10 +71,8 @@ function AdminHomepage() {
             { loading ?
             <LoadingScreen />
             :
-            <div>
-                <header>
-                    Welcome to the admin homepage!
-                </header>
+            <div className='App'>
+                <Header text="Welcome to the Admin Homepage!" />
 
                 <GeneralButton 
                     text="Add Inductee"
@@ -78,21 +80,25 @@ function AdminHomepage() {
                 />
 
                 {inductees && inductees.length > 0 ? (
-                    <ul>
+                    <>
                         {inductees.map((inductee) => (
-                            <li key={inductee.id}>
+                            <div key={inductee.id} className={styles.adminList}>
                                 <h3>{inductee.rank} {inductee.name} ({inductee.unit})</h3>
-                                <GeneralButton 
-                                    text="Edit"
-                                    onClick={() => navigateEditInductee(inductee)}
-                                />
-                                <GeneralButton
-                                    text="Delete"
-                                    onClick={() => confirmDeleteInductee(inductee)}
-                                />
-                            </li>
+                                <div className={styles.div1}>
+                                    <div className={styles.div2}>
+                                        <GeneralButton 
+                                            text="Edit"
+                                            onClick={() => navigateEditInductee(inductee)}
+                                        />
+                                        <DeleteButton
+                                            text="Delete"
+                                            onClick={() => confirmDeleteInductee(inductee)}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         ))}
-                    </ul>
+                    </>
                 ) : (
                     <p>No inductees available.</p>
                 )}

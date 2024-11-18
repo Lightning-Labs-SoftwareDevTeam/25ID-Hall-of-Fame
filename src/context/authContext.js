@@ -1,11 +1,19 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import loginService from '../services/loginService';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [userToken, setUserToken] = useState(null);
+  const [userToken, setUserToken] = useState(localStorage.getItem('userToken') || null);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (userToken) {
+      localStorage.setItem('userToken', userToken);
+    } else {
+      localStorage.removeItem('userToken');
+    }
+  }, [userToken]);
 
   const login = async (loginData) => {   
     if (loginData.username === '' || !loginData.username) {
@@ -34,6 +42,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUserToken(null);
+    localStorage.removeItem('userToken');
   };
 
   return (
