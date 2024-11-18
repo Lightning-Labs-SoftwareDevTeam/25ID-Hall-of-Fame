@@ -27,6 +27,9 @@ export const AuthProvider = ({ children }) => {
     try {
       setError('');
       const data = await loginService(loginData);
+      if (!data.getToken()) {
+        throw new Error('Network error')
+      }
       setUserToken(data.getToken());
       return true;
     } catch (error) {
